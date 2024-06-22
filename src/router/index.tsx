@@ -1,21 +1,21 @@
 import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
-import AuthLayout from "../pages/Layout";
+import AuthLayout from "../layouts/Layout";
 import NotFound from "../pages/error/NotFound";
 import { Home, Login } from "./imports";
 
 export const router = createBrowserRouter([
   {
     path: "",
-    element: <Outlet />,
+    element: <AuthLayout />,
     children: [
       {
         path: "",
-        element: <AuthLayout />,
+        element: <Outlet />,
         errorElement: <NotFound />,
         children: [
           {
             path: "",
-            element: <Navigate to={"/home"} />,
+            element: <Navigate to="/home" />,
           },
           {
             path: "home",
@@ -28,12 +28,18 @@ export const router = createBrowserRouter([
         element: <NotFound />,
       },
       {
-        path: "public/login",
-        element: <Login />,
+        path: "public",
+        element: <Outlet />,
+        children: [
+          {
+            path: "login",
+            element: <Login />,
+          },
+        ],
       },
       {
         path: "*",
-        element: <Navigate to={"/home"} />,
+        element: <Navigate to="/public/login" />,
       },
     ],
   },
