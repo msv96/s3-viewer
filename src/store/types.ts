@@ -1,13 +1,24 @@
-import { TLoginFormValues } from "../types/global";
+import { TFolders, TLoginFormValues } from "../types/global";
 
-export type AppStore = CommonSlice & UserSlice;
+export type AppStore = BucketSlice & CommonSlice & UserSlice;
+
+export type BucketSlice = {
+  bucketState: {
+    currentFolder: TFolders[];
+    folders: TFolders[];
+  };
+  bucketActions: {
+    setCurrentFolder(data: TFolders[]): void;
+    setFolders(data: TFolders[]): void;
+  };
+};
 
 export type CommonSlice = {
   commonState: {
     loader: boolean;
   };
   commonActions: {
-    toggleLoader(value?: boolean): void;
+    toggleLoader(data?: boolean): void;
   };
 };
 

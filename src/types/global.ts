@@ -8,3 +8,9 @@ export type TLoginFormValues = {
   bucketName: string;
   region: string;
 };
+
+export type TFolders = {
+  name: string;
+  isFolder: boolean;
+  children?: TFolders[];
+};

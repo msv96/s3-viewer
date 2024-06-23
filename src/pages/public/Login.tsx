@@ -31,6 +31,9 @@ export default function Login() {
       bucketName: "",
       region: "",
     },
+    onValuesChange(values) {
+      setAuth({ bucketName: values.bucketName, region: values.region });
+    },
     validate: {
       accessId(val) {
         return val.length <= 10 ? "Invalid Access Id" : null;
@@ -71,14 +74,14 @@ export default function Login() {
             <TextInput
               withAsterisk
               type="text"
-              label="AWS Access ID"
-              placeholder="Your access id"
+              label="Access Key ID"
+              placeholder="Your access key id"
               {...getInputProps("accessId")}
             />
             <PasswordInput
               withAsterisk
-              label="AWS Secret Key"
-              placeholder="Your secret key"
+              label="Secret Access Key"
+              placeholder="Your secret access key"
               {...getInputProps("secretKey")}
             />
             <TextInput

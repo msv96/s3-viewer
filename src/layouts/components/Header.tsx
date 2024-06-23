@@ -1,5 +1,5 @@
 import { ActionIcon, Anchor, Group, Text } from "@mantine/core";
-import { IconBrowser, IconLogout } from "@tabler/icons-react";
+import { IconLogout } from "@tabler/icons-react";
 import { NavLink } from "react-router-dom";
 import { useUserAction, useUserState } from "../../store/hooks";
 
@@ -9,16 +9,10 @@ export default function Header() {
 
   return (
     <Group align="center" justify="space-between">
-      <Anchor
-        component={NavLink}
-        to="/home"
-        title="Home"
-        underline="never"
-      >
+      <Anchor component={NavLink} to="/home" title="Home" underline="never">
         <Group align="center" gap="xs">
-          <IconBrowser />
           <Text component="div" fw={700} fz="lg">
-            S3
+            S3 Viewer
           </Text>
         </Group>
       </Anchor>

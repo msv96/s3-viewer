@@ -9,13 +9,13 @@ export const createCommonSlice: CommonSliceReturnType = (set) => {
       loader: false,
     },
     commonActions: {
-      toggleLoader(value) {
+      toggleLoader(data) {
         set((state) => {
           return {
             ...state,
             commonState: {
               ...state.commonState,
-              loader: value ?? !state.commonState.loader,
+              loader: data ?? !state.commonState.loader,
             },
           };
         });
