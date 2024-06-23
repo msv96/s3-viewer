@@ -14,19 +14,12 @@
 }
 
 .control {
-  @media (max-width: var(--mantine-breakpoint-sm)) {
-    width: 100%;
-  }
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-md);
 }
 
 .mobileImage {
   @media (min-width: 48em) {
-    display: none;
-  }
-}
-
-.desktopImage {
-  @media (max-width: 47.99em) {
     display: none;
   }
 }

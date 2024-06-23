@@ -1,5 +1,6 @@
-import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import AuthLayout from "../layouts/Layout";
+import ProtectedRoute from "../layouts/ProtectedRoute";
 import NotFound from "../pages/error/NotFound";
 import { Home, Login } from "./imports";
 
@@ -10,7 +11,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Outlet />,
+        element: <ProtectedRoute />,
         errorElement: <NotFound />,
         children: [
           {
@@ -28,18 +29,12 @@ export const router = createBrowserRouter([
         element: <NotFound />,
       },
       {
-        path: "public",
-        element: <Outlet />,
-        children: [
-          {
-            path: "login",
-            element: <Login />,
-          },
-        ],
+        path: "login",
+        element: <Login />,
       },
       {
         path: "*",
-        element: <Navigate to="/public/login" />,
+        element: <Navigate to="/login" />,
       },
     ],
   },

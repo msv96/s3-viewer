@@ -1,4 +1,5 @@
 import { MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./common/ErrorBoundary";
@@ -11,7 +12,9 @@ export default function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={themeOverride}>
-          <RouterProvider router={router} />
+          <ModalsProvider>
+            <RouterProvider router={router} />
+          </ModalsProvider>
         </MantineProvider>
       </QueryClientProvider>
     </ErrorBoundary>

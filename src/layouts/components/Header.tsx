@@ -1,15 +1,37 @@
-import { Anchor, Box, Group } from "@mantine/core";
-import { IconBrowser } from "@tabler/icons-react";
+import { ActionIcon, Anchor, Group, Text } from "@mantine/core";
+import { IconBrowser, IconLogout } from "@tabler/icons-react";
 import { NavLink } from "react-router-dom";
+import { useUserAction, useUserState } from "../../store/hooks";
 
 export default function Header() {
+  const { isLoggedIn } = useUserState();
+  const { logout } = useUserAction();
+
   return (
-    <Box>
-      <Group align="center">
-        <Anchor component={NavLink} to="/home" title="Home page link" h="27px">
+    <Group align="center" justify="space-between">
+      <Anchor
+        component={NavLink}
+        to="/home"
+        title="Home"
+        underline="never"
+      >
+        <Group align="center" gap="xs">
           <IconBrowser />
-        </Anchor>
-      </Group>
-    </Box>
+          <Text component="div" fw={700} fz="lg">
+            S3
+          </Text>
+        </Group>
+      </Anchor>
+      {isLoggedIn ? (
+        <ActionIcon
+          variant="subtle"
+          color="red"
+          title="Logout"
+          onClick={() => logout()}
+        >
+          <IconLogout />
+        </ActionIcon>
+      ) : null}
+    </Group>
   );
 }

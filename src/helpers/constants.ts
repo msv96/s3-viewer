@@ -1,1 +1,1 @@
-export const API_URL = "";
+export const SessionStorageKey = "s3-viewer-auth";

@@ -1,12 +1,24 @@
-import { Navigate } from "react-router-dom";
-import { useUserState } from "../../store/hooks";
+import { useEffect } from "react";
+import { useCommonAction } from "../../store/hooks";
+import { useBucketFolders } from "./home-hooks";
 
 export default function Home() {
-  const { isLoggedIn } = useUserState();
+  const { toggleLoader } = useCommonAction();
 
-  if (!isLoggedIn) {
-    return <Navigate to="/public/login" />;
-  }
+  // const { mutate: filesMutation } = useBucketFiles();
+  const { mutate: foldersMutation } = useBucketFolders();
+
+  useEffect(() => {
+    toggleLoader(true);
+    foldersMutation(undefined, {
+      onSuccess(folders) {
+        console.log("folders", folders);
+      },
+      onSettled() {
+        toggleLoader(false);
+      },
+    });
+  }, [foldersMutation, toggleLoader]);
 
   return <div>Home</div>;
 }

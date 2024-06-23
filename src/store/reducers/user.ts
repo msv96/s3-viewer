@@ -1,46 +1,39 @@
 import type { StateCreator } from "zustand";
 import { AppStore, UserSlice } from "../types";
 
-export const createUserSlice: StateCreator<AppStore, [], [], UserSlice> = (
-  set
-) => ({
-  userState: {
-    isLoggedIn: false,
-    userDetails: null,
-    token: "",
-  },
-  userActions: {
-    getUser: (data) => {
-      set((state) => ({
-        ...state,
-        userState: {
-          ...state.userState,
-          isLoggedIn: true,
-          userDetails: data,
-        },
-      }));
+type UserSliceReturnType = StateCreator<AppStore, [], [], UserSlice>;
+
+export const createUserSlice: UserSliceReturnType = (set) => {
+  return {
+    userState: {
+      isLoggedIn: false,
+      authData: null,
     },
-    login: (data) => {
-      set((state) => ({
-        ...state,
-        userState: {
-          ...state.userState,
-          isLoggedIn: true,
-          userDetails: data,
-        },
-      }));
+    userActions: {
+      login(data) {
+        set((state) => {
+          return {
+            ...state,
+            userState: {
+              ...state.userState,
+              isLoggedIn: true,
+              authData: data,
+            },
+          };
+        });
+      },
+      logout() {
+        set((state) => {
+          return {
+            ...state,
+            userState: {
+              ...state.userState,
+              isLoggedIn: false,
+              authData: null,
+            },
+          };
+        });
+      },
     },
-    logout: (status) => {
-      if (status) {
-        set((state) => ({
-          ...state,
-          userState: {
-            ...state.userState,
-            isLoggedIn: false,
-            userDetails: null,
-          },
-        }));
-      }
-    },
-  },
-});
+  };
+};

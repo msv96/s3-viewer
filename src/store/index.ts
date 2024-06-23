@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { createUserSlice } from "./reducers/user";
+import { createCommonSlice, createUserSlice } from "./reducers";
 import { AppStore } from "./types";
 
 export const useAppStore = create<AppStore, [["zustand/devtools", never]]>(
   devtools(
     (...a) => ({
+      ...createCommonSlice(...a),
       ...createUserSlice(...a),
     }),
     {

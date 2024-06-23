@@ -1,16 +1,23 @@
-import { TUserData } from "../types/global";
+import { TLoginFormValues } from "../types/global";
 
-export type AppStore = UserSlice;
+export type AppStore = CommonSlice & UserSlice;
+
+export type CommonSlice = {
+  commonState: {
+    loader: boolean;
+  };
+  commonActions: {
+    toggleLoader(value?: boolean): void;
+  };
+};
 
 export type UserSlice = {
   userState: {
     isLoggedIn: boolean;
-    userDetails: TUserData | null;
-    token: string;
+    authData: TLoginFormValues | null;
   };
   userActions: {
-    getUser(data: TUserData): void;
-    login(data: TUserData): void;
-    logout(status: boolean): void;
+    login(data: TLoginFormValues): void;
+    logout(): void;
   };
 };
