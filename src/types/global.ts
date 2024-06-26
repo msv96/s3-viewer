@@ -11,6 +11,7 @@ export type TLoginFormValues = {
 
 export type TFolders = {
   name: string;
+  displayName: string;
   isFolder: boolean;
   children?: TFolders[];
 };

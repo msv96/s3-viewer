@@ -49,6 +49,7 @@ export const mapToFoldersAndFiles = ({
     return CommonPrefixes.map(({ Prefix }) => {
       return {
         name: Prefix || "",
+        displayName: Prefix || "",
         isFolder: true,
       };
     });
@@ -58,6 +59,7 @@ export const mapToFoldersAndFiles = ({
     return Contents.map(({ Key }) => {
       return {
         name: Key || "",
+        displayName: Key || "",
         isFolder: false,
       };
     });

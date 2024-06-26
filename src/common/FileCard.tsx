@@ -1,19 +1,18 @@
-import { GridCol, Paper, Stack } from "@mantine/core";
+import { Paper, Stack } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";
 
 type Props = {
+  displayName: string;
   fileName: string;
 };
 
-export default function FileCard({ fileName }: Props) {
+export default function FileCard({ displayName }: Props) {
   return (
-    <GridCol span={1}>
-      <Paper shadow="xs" p="xs">
-        <Stack gap="xs" align="center">
-          <IconFile size={48} />
-          {fileName}
-        </Stack>
-      </Paper>
-    </GridCol>
+    <Paper shadow="xs" p="xs">
+      <Stack gap="xs" align="center">
+        <IconFile size={48} />
+        {displayName}
+      </Stack>
+    </Paper>
   );
 }

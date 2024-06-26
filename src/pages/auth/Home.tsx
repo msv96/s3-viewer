@@ -1,19 +1,42 @@
-import { Grid } from "@mantine/core";
-import { useEffect } from "react";
+import { Grid, GridCol } from "@mantine/core";
+import { useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import FileCard from "../../common/FileCard";
 import FolderCard from "../../common/FolderCard";
-import { useBucketState, useCommonAction } from "../../store/hooks";
+import {
+  useBucketAction,
+  useBucketState,
+  useCommonAction,
+} from "../../store/hooks";
 import { useFetchBucket } from "./home-hooks";
 
 export default function Home() {
+  const [searchParams] = useSearchParams({ Prefix: "" });
+  const Prefix = searchParams.get("Prefix") || "";
+
   const { currentFolder } = useBucketState();
+  const { setCurrentFolder, setFolders } = useBucketAction();
   const { toggleLoader } = useCommonAction();
 
-  const { status: filesStatus, mutate: filesMutate } = useFetchBucket();
-  const { status: foldersStatus, mutate: foldersMutate } = useFetchBucket();
+  const { isPending, isSuccess, mutate: filesMutate } = useFetchBucket();
 
-  const isPending = filesStatus === "pending" || foldersStatus === "pending";
-  const isSuccess = filesStatus === "success" && foldersStatus === "success";
+  const handleBucketFetch = useCallback(() => {
+    return filesMutate(
+      { Delimiter: "/", Prefix, MaxKeys: 24 },
+      {
+        onSuccess(response) {
+          const data = response.map((item) => {
+            return {
+              ...item,
+              displayName: item.name.replace(Prefix, ""),
+            };
+          });
+          setCurrentFolder(data);
+          setFolders(data);
+        },
+      }
+    );
+  }, [Prefix, filesMutate, setCurrentFolder, setFolders]);
 
   useEffect(() => {
     if (isPending) {
@@ -24,31 +47,21 @@ export default function Home() {
   }, [isPending, isSuccess, toggleLoader]);
 
   useEffect(() => {
-    filesMutate(
-      { MaxKeys: 24 },
-      {
-        onSuccess(data) {
-          console.log("files success", data);
-        },
-      }
-    );
-    foldersMutate(
-      { MaxKeys: 24, Delimiter: "/" },
-      {
-        onSuccess(data) {
-          console.log("folders success", data);
-        },
-      }
-    );
-  }, [filesMutate, foldersMutate]);
+    handleBucketFetch();
+  }, [handleBucketFetch]);
 
   return (
     <Grid>
-      {currentFolder.map(({ isFolder, name }) => {
-        if (isFolder) {
-          return <FolderCard key={name} folderName={name} />;
-        }
-        return <FileCard key={name} fileName={name} />;
+      {currentFolder.map(({ displayName, isFolder, name }) => {
+        return (
+          <GridCol key={name} span={1}>
+            {isFolder ? (
+              <FolderCard displayName={displayName} folderName={name} />
+            ) : (
+              <FileCard displayName={displayName} fileName={name} />
+            )}
+          </GridCol>
+        );
       })}
     </Grid>
   );

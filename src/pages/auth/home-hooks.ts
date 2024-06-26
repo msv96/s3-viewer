@@ -5,7 +5,6 @@ import {
   awsS3ListCommand,
   mapToFoldersAndFiles,
 } from "../../helpers/aws-s3-client";
-import { useAppStore } from "../../store";
 import { TFolders } from "../../types/global";
 
 export const useFetchBucket = (
@@ -23,34 +22,43 @@ export const useFetchBucket = (
         .map(([key, value]) => key + value)
         .join(","),
     ],
-    mutationFn: async (options: Partial<ListObjectsV2CommandInput> = {}) => {
-      const { folders } = useAppStore.getState().bucketState;
+    mutationFn: async (
+      options: Partial<ListObjectsV2CommandInput> = {
+        Delimiter: "/",
+        Prefix: "",
+        MaxKeys: 1000,
+      }
+    ) => {
       const params = { ...args, ...options };
 
       const client = awsS3Client();
       const command = awsS3ListCommand(params);
+      let result: TFolders[] = [];
 
       if (!client || !command) {
-        return [];
+        return result;
       }
 
       const { CommonPrefixes, Contents } = await client.send(command);
 
-      if (params.Delimiter && CommonPrefixes && CommonPrefixes.length >= 1) {
+      if (CommonPrefixes && CommonPrefixes.length >= 1) {
         const foldersData = CommonPrefixes.filter(({ Prefix }) => !!Prefix);
 
-        return mapToFoldersAndFiles({ CommonPrefixes: foldersData, folders });
+        result = [
+          ...result,
+          ...mapToFoldersAndFiles({ CommonPrefixes: foldersData }),
+        ];
       }
 
-      if (!params.Delimiter && Contents && Contents.length >= 1) {
+      if (Contents && Contents.length >= 1) {
         const filesData = Contents.filter(({ Key }) => {
           return Key && !Key.endsWith("/");
         });
 
-        return mapToFoldersAndFiles({ Contents: filesData, folders });
+        result = [...result, ...mapToFoldersAndFiles({ Contents: filesData })];
       }
 
-      return [];
+      return result;
     },
   });
 };

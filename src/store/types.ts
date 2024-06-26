@@ -4,10 +4,12 @@ export type AppStore = BucketSlice & CommonSlice & UserSlice;
 
 export type BucketSlice = {
   bucketState: {
+    breadcrumb: string[];
     currentFolder: TFolders[];
     folders: TFolders[];
   };
   bucketActions: {
+    setBreadcrumb(data: string[]): void;
     setCurrentFolder(data: TFolders[]): void;
     setFolders(data: TFolders[]): void;
   };

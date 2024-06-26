@@ -53,7 +53,7 @@ export default function Login() {
   const handleFormSubmit = (values: TLoginFormValues) => {
     login(values);
     setAuth({ bucketName: values.bucketName, region: values.region });
-    navigate("/home");
+    navigate("/home?Prefix=");
   };
 
   useEffect(() => {
